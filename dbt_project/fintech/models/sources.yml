@@ -1,0 +1,22 @@
+version: 2
+
+sources:
+  - name: kafka_ingest
+    database: FINTECH_RAW_DB
+    schema: KAFKA_INGEST
+    tables:
+      - name: trades
+        freshness:
+          warn_after: {count: 1, period: minute}
+          error_after: {count: 5, period: minute}
+        loaded_at_field: INGESTED_AT
+
+  - name: airbyte_ingest
+    database: FINTECH_RAW_DB
+    schema: AIRBYTE_INGEST
+    tables:
+      - name: news
+        freshness:
+          warn_after: {count: 1, period: hour}
+          error_after: {count: 24, period: hour}
+        loaded_at_field: INGESTED_AT

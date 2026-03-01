@@ -1,0 +1,8 @@
+.env
+.venv/
+__pycache__/
+*.pyc
+.DS_Store
+dbt_project/fintech/logs/
+dbt_project/fintech/target/
+dbt_project/fintech/dbt_packages/

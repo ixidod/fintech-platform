@@ -1,0 +1,51 @@
+version: 2
+
+models:
+  - name: stg_trades
+    description: "Cleaned trade events from Kafka"
+    columns:
+      - name: trade_id
+        tests:
+          - not_null
+          - unique
+      - name: ticker
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['AAPL', 'TSLA', 'MSFT', 'GOOGL', 'AMZN', 'NVDA', 'SPY', 'META']
+      - name: action
+        tests:
+          - accepted_values:
+              values: ['buy', 'sell']
+      - name: price
+        tests:
+          - not_null
+      - name: trader_type
+        tests:
+          - accepted_values:
+              values: ['retail', 'institutional', 'algo']
+
+  - name: stg_news
+    description: "Cleaned and sentiment scored news headlines"
+    columns:
+      - name: article_id
+        tests:
+          - not_null
+          - unique
+      - name: sentiment
+        tests:
+          - accepted_values:
+              values: ['positive', 'negative', 'neutral']
+      - name: sentiment_score
+        tests:
+          - not_null
+
+  - name: stg_prices
+    description: "1-minute OHLCV price bars derived from trades"
+    columns:
+      - name: ticker
+        tests:
+          - not_null
+      - name: vwap
+        tests:
+          - not_null
