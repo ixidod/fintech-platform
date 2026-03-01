@@ -8,9 +8,7 @@ from faker import Faker
 
 fake = Faker()
 
-# ============================================
-# CONFIG
-# ============================================
+
 KAFKA_BROKER = 'localhost:9092'
 TOPIC = 'trades'
 EVENTS_PER_SECOND = 100  # crank this up later for big tables
@@ -38,9 +36,7 @@ ORDER_WEIGHTS = [0.6, 0.3, 0.1]
 SESSIONS = ['pre_market', 'regular', 'after_hours']
 
 
-# ============================================
-# HELPERS
-# ============================================
+
 def get_session() -> str:
     hour = datetime.now().hour
     if 4 <= hour < 9:
@@ -84,17 +80,15 @@ def generate_trade() -> dict:
     }
 
 
-# ============================================
-# PRODUCER
-# ============================================
+
 def main():
     producer = KafkaProducer(
         bootstrap_servers=KAFKA_BROKER,
         value_serializer=lambda v: json.dumps(v).encode('utf-8')
     )
 
-    print(f"🚀 Trade generator started — {EVENTS_PER_SECOND} events/sec")
-    print(f"📡 Publishing to topic: {TOPIC}")
+    print(f" Trade generator started — {EVENTS_PER_SECOND} events/sec")
+    print(f" Publishing to topic: {TOPIC}")
     print("Press Ctrl+C to stop\n")
 
     count = 0
@@ -104,7 +98,7 @@ def main():
         count += 1
 
         if count % 100 == 0:
-            print(f"✅ {count} trades sent | latest: {trade['ticker']} {trade['action']} {trade['price']} ({trade['trader_type']})")
+            print(f" {count} trades sent | latest: {trade['ticker']} {trade['action']} {trade['price']} ({trade['trader_type']})")
 
         sleep(1 / EVENTS_PER_SECOND)
 
