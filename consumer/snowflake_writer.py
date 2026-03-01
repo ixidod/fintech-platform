@@ -7,18 +7,12 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-# ============================================
-# CONFIG
-# ============================================
 KAFKA_BROKER = 'localhost:9092'
 TOPIC = 'trades'
 GROUP_ID = 'snowflake-writer'
 BATCH_SIZE = 100        # write to snowflake every 100 messages
 BATCH_TIMEOUT_SEC = 10  # or every 10 seconds, whichever comes first
 
-# ============================================
-# SNOWFLAKE CONNECTION
-# ============================================
 def get_snowflake_connection():
     return snowflake.connector.connect(
         account=os.getenv('SNOWFLAKE_ACCOUNT'),
@@ -30,9 +24,6 @@ def get_snowflake_connection():
         schema=os.getenv('SNOWFLAKE_SCHEMA', 'KAFKA_INGEST'),
     )
 
-# ============================================
-# WRITE BATCH TO SNOWFLAKE
-# ============================================
 def write_batch(cursor, batch: list):
     if not batch:
         return
@@ -73,9 +64,6 @@ def write_batch(cursor, batch: list):
 
     print(f"✅ Written {len(rows)} trades to Snowflake | {datetime.now().strftime('%H:%M:%S')}")
 
-# ============================================
-# CONSUMER
-# ============================================
 def main():
     print(f"👂 Consumer started — listening to topic: {TOPIC}")
     print(f"📦 Batch size: {BATCH_SIZE} | Timeout: {BATCH_TIMEOUT_SEC}s\n")
